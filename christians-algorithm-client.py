@@ -5,7 +5,6 @@ import datetime
 import time
 
 from dateutil import parser
-from timeit import default_timer as timer
 from localclock import Clock
 
 # Server address
@@ -24,24 +23,23 @@ def do_measurement():
     # connect to the clock server on local computer
     s.connect((SERVER_IP, port))
 
-    request_time = timer()
+    request_time = LOCAL_CLOCK.get_time()
 
     # receive data from the server
     server_time = parser.parse(s.recv(1024).decode())
-    response_time = timer()
-    actual_time = LOCAL_CLOCK.get_time()
+    response_time = LOCAL_CLOCK.get_time()
 
     # TODO berechnen Sie die round-trip-time
     # Dafür stehen folgende Variablen zur Verfügung:
-    # - request_time: Zeitpunkt des Nachrichtenausgangs (float)
-    # - response_time: Zeitpunkt des Nachrichteneingangs (float)
+    # - request_time: Zeitpunkt des Nachrichtenausgangs (datetime)
+    # - response_time: Zeitpunkt des Nachrichteneingangs (datetime)
     round_trip_time = 0
 
     # synchronize process client clock time
     # TODO berechnen Sie den gemessenen Offset auf basis der Serverzeit, der lokalen Uhr und der round-trip-time
     # Dafür stehen folgende Variablen zur Verfügung:
     # - server_time: Serverzeit (datetime)
-    # - actual_time: Zeit der lokalen Uhr (datetime)
+    # - response_time: Zeitpunkt des Nachrichteneingangs (datetime)
     # - round_trip_time: round-trip-time (float)
     offset_measurement = 0
 

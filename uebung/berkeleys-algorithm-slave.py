@@ -29,17 +29,20 @@ def startSendingTime(slave_client):
 # client thread function used to receive synchronized time
 def startReceivingTime(slave_client):
     while True:
-        # receive data from the server
-        estimated_offset_in_seconds_string = slave_client.recv(1024).decode()
-        estimated_offset_in_seconds = float(estimated_offset_in_seconds_string)
+        try:
+            # receive data from the server
+            estimated_offset_in_seconds_string = slave_client.recv(1024).decode()
+            estimated_offset_in_seconds = float(estimated_offset_in_seconds_string)
 
-        # TODO Auf Basis der Schätzung soll die Geschwindigkeit der Uhr angepasst werden
-        # Die Uhrengeschwindigkeit kann mittels LOCAL_CLOCK.set_speed(x) auf den Wert x gesetzt werden. x muss grösser
-        # als 0 sein. x=1 bedeute nominale Geschwindigkeit
-        LOCAL_CLOCK.set_speed(1)
+            # TODO Auf Basis der Schätzung soll die Geschwindigkeit der Uhr angepasst werden
+            # Die Uhrengeschwindigkeit kann mittels LOCAL_CLOCK.set_speed(x) auf den Wert x gesetzt werden. x muss grösser
+            # als 0 sein. x=1 bedeute nominale Geschwindigkeit
+            LOCAL_CLOCK.set_speed(1)
 
-        print("[" + str(Clock().get_time()) + "]: estimated offset: " + str(round(estimated_offset_in_seconds)) +
-              " us, current clock speed:" + str(round(LOCAL_CLOCK.get_speed()*100)) + "%", end="\n")
+            print("[" + str(Clock().get_time()) + "]: estimated offset: " + str(round(estimated_offset_in_seconds*1000)/1000) +
+                  " s, current clock speed:" + str(round(LOCAL_CLOCK.get_speed()*100)) + "%", end="\n")
+        except Exception as e:
+            print("[" + str(Clock().get_time()) + "]: bad string received")
 
 
 # function used to Synchronize client process time

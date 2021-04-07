@@ -58,16 +58,18 @@ def get_offset_estimation(m_count=5):
 
 # function used to Synchronize client process time
 def synchronizeTime():
-    estimation = get_offset_estimation(5)
+    try:
+        estimation = get_offset_estimation(5)
 
-    # TODO Auf Basis der Schätzung soll die Geschwindigkeit der Uhr angepasst werden
-    # Die Uhrengeschwindigkeit kann mittels LOCAL_CLOCK.set_speed(x) auf den Wert x gesetzt werden. x muss grösser als
-    # 0 sein. x=1 bedeute nominale Geschwindigkeit
-    LOCAL_CLOCK.set_speed(1)
+        # TODO Auf Basis der Schätzung soll die Geschwindigkeit der Uhr angepasst werden
+        # Die Uhrengeschwindigkeit kann mittels LOCAL_CLOCK.set_speed(x) auf den Wert x gesetzt werden. x muss grösser als
+        # 0 sein. x=1 bedeute nominale Geschwindigkeit
+        LOCAL_CLOCK.set_speed(1)
 
-    print("[" + str(Clock().get_time()) + "]: estimated offset: " + str(round(estimation["offset_measurement"])) +
-          " us, current clock speed:" + str(round(LOCAL_CLOCK.get_speed() * 100)) + "%", end="\n")
-
+        print("[" + str(Clock().get_time()) + "]: estimated offset: " + str(round(estimation["offset_measurement"])) +
+              " us, current clock speed:" + str(round(LOCAL_CLOCK.get_speed() * 100)) + "%", end="\n")
+    except Exception as e:
+        print("[" + str(Clock().get_time()) + "]: bad string received")
 
 # Driver function
 if __name__ == '__main__':
@@ -76,7 +78,7 @@ if __name__ == '__main__':
         # synchronize time using clock server
         while True:
             synchronizeTime()
-            time.sleep(1)
+            time.sleep(5)
 
     except KeyboardInterrupt:
         print("End")

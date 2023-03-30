@@ -1,10 +1,8 @@
 # Python3 program imitating a client process
 
 import threading
-import datetime
 import socket
 import time
-from random import randint, random
 from localclock import Clock
 import sys
 import logging
@@ -38,6 +36,8 @@ def startSendingTime(slave_client):
         except socket.error as e:
             print("Connection error: %s" % e)
             logging.debug("Exit sending, socket error")
+            stop_event.set()
+            handle_kb_interrupt(0, None)
             break
 
 
@@ -64,10 +64,14 @@ def startReceivingTime(slave_client):
         except socket.error as e:
             print("Connection error: %s" % e)
             logging.debug("Exit receiving, socket error")
+            stop_event.set()
+            handle_kb_interrupt(0, None)
             break
         except Exception as e:
             print("[" + str(Clock().get_time()) + "]: bad string received")
             logging.debug("Exit receiving, string error")
+            stop_event.set()
+            handle_kb_interrupt(0, None)
             break
 
 # function used to Synchronize client process time

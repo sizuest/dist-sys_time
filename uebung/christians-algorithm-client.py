@@ -1,7 +1,6 @@
 # Python3 program imitating a client process
 
 import socket
-import datetime
 import time
 
 from dateutil import parser
@@ -29,6 +28,12 @@ def do_measurement():
     server_time = parser.parse(s.recv(1024).decode())
     response_time = LOCAL_CLOCK.get_time()
     actual_time = LOCAL_CLOCK.get_time()
+
+    # convert all the timestamps to seconds
+    request_time = request_time.timestamp()
+    server_time = server_time.timestamp()
+    response_time = response_time.timestamp()
+    actual_time = actual_time.timestamp()
 
     # TODO berechnen Sie die round-trip-time
     # Dafür stehen folgende Variablen zur Verfügung:
